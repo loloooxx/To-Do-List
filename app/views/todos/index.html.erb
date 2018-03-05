@@ -1,0 +1,30 @@
+<h1>TO DO LIST</h1>
+<h2><%= "Today : #{Time.now.to_date}"%></h2>
+
+<table class="table table-condensed table-hover"> 
+    <tr>
+      <td class="active">Check</td>
+      <td class="success">Task</td>
+      <td class="warning">Due Date</td>
+      <td class="danger">Note</td>
+    </tr>
+
+    <% @todos.each do |todo| %>
+      <tr>
+        <td class="active"><%= check_box_tag :box, true , todo.box, data: { url: check_todo_path(todo), method: :post, remote: true }%></td>
+        <td class="success"><%= todo.name %></td>
+        <td class="warning"><%= todo.duedate %></td>
+        <td class="danger"><%= simple_format(todo.note) %></td>
+        <td><%= link_to 'edit', edit_todo_path(todo) %></td>
+
+        <% if Time.now.to_date <= todo.duedate %>
+          <td><%= link_to 'delete', todo_path(todo), method: :delete, data:{ confirm: "Are you sure?"}%></td>
+        <% else %>
+          <td>overdue</td>
+        <% end%>
+      </tr> 
+    <% end %>
+</table>
+
+
+<button type="button" class="btn btn-default btn-lg active"><%= link_to 'Create task', new_todo_path %></button>
